@@ -1,10 +1,9 @@
-# raw_data_sources/grants.py
 from .utils import connect_to_db, fetch_data_as_df
 from loguru import logger
 
 def fetch_grants():
     """Fetch and clean grants data."""
-    query = "SELECT * FROM grants_data;"
+    query = "SELECT * FROM grants_data;"  # Ensure table name is correct
     engine = connect_to_db()
     if not engine:
         logger.error("Database connection failed")
@@ -21,8 +20,10 @@ def fetch_grants():
         return pd.DataFrame()
     
     grants_df = grants_df.dropna(subset=["summary_description"])  # Drop rows with missing descriptions
-    if "funding_categories" in grants_df.columns:
-        grants_df["funding_categories"] = grants_df["funding_categories"].fillna("")  # Fill missing categories
+    if "award_ceiling" in grants_df.columns:
+        grants_df["award_ceiling"] = grants_df["award_ceiling"].fillna(0)
+    if "award_floor" in grants_df.columns:
+        grants_df["award_floor"] = grants_df["award_floor"].fillna(0)
     
     logger.success(f"Cleaned grants data: {len(grants_df)} rows")
     return grants_df

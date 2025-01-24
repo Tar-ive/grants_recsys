@@ -24,19 +24,15 @@ def connect_to_db():
         return None
 
 def fetch_data_as_df(query, engine):
-    """Fetch data from the database and return it as a pandas DataFrame."""
-    if not engine:
-        logger.error("No database connection provided")
-        return None
-    
+    """Execute a SQL query and return results as a DataFrame."""
     try:
-        with engine.connect() as conn:
-            df = pd.read_sql_query(query, conn)
+        with engine.connect() as connection:
+            df = pd.read_sql(query, connection)
             if df.empty:
                 logger.warning("Query returned no data")
             else:
                 logger.success(f"Fetched {len(df)} rows")
             return df
     except Exception as e:
-        logger.error(f"Error fetching data: {e}")
+        logger.error(f"Error executing query: {e}")
         return None
