@@ -1,0 +1,12 @@
+data:
+  supabase_tables:
+    grants: "grants_data"
+    researchers: "researchers"
+
+features:
+  grant_keywords: 
+    max_features: 100  # For TF-IDF vectorizer
+
+model:
+  batch_size: 32
+  epochs: 10
