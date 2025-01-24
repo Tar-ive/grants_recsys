@@ -1,8 +1,11 @@
-psycopg2-binary==2.9.6
-pandas==2.0.3
-python-dotenv==1.0.0
-sqlalchemy==2.0.20
-tensorflow-recommenders==0.7.3
-catboost==1.2.2
-lightgbm==4.3.0
+# requirements.txt
+tensorflow==2.12.0
+pandas==1.5.3
+numpy==1.24.3
+scikit-learn==1.2.2
 loguru==0.7.0
+sqlalchemy==2.0.15
+python-dotenv==1.0.0
+fastapi==0.95.2
+uvicorn==0.22.0
+gradio==3.34.0

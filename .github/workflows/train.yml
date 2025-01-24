@@ -1,8 +1,8 @@
 name: Train Model
 on:
-  workflow_dispatch:  # Manually trigger the workflow
+  workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0'  # Optional: Run weekly at midnight UTC
+    - cron: '0 0 * * 0'
 
 jobs:
   train:
@@ -17,17 +17,27 @@ jobs:
           python-version: "3.10"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create models directory
+        run: mkdir -p models
 
       - name: Train model
-        run: python training/two_tower.py  # Run your training script
+        run: python training/two_tower.py
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}  # Use GitHub Secrets
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Commit and push trained model
+      - name: Commit and push to GitHub
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add models/  # Add your trained model directory
-          git commit -m "Update model from GitHub Actions"
+          git add models/
+          git commit -m "Update model from GitHub Actions" || echo "No changes to commit"
           git push
+
+      - name: Push to Replit
+        run: |
+          git remote add replit https://${{ secrets.REPLIT_TOKEN }}@replit.com/github/Tar-ive/grants_recsys.git
+          git push replit main -f
