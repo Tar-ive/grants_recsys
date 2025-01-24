@@ -1,15 +1,14 @@
-name: Train Model
+name: Train and Deploy
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * 0'
+  push:
+    branches: [main]
 
 jobs:
   train:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -18,26 +17,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
+          pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Create models directory
-        run: mkdir -p models
-
       - name: Train model
-        run: python training/two_tower.py
+        run: |
+          mkdir -p models
+          python training/two_tower.py
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Commit and push to GitHub
+      - name: Commit model
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add models/
-          git commit -m "Update model from GitHub Actions" || echo "No changes to commit"
+          git commit -m "Update model" || echo "No changes"
           git push
 
-      - name: Push to Replit
+      - name: Trigger Render Deploy
         run: |
-          git remote add replit https://${{ secrets.REPLIT_TOKEN }}@replit.com/github/Tar-ive/grants_recsys.git
-          git push replit main -f
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
