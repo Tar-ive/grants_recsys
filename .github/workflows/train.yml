@@ -20,19 +20,20 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Train model
+      - name: Train models
         run: |
           mkdir -p models
           python training/two_tower.py
+          python training/ranking.py
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Commit model
+      - name: Commit and push
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
           git add models/
-          git commit -m "Update model" || echo "No changes"
+          git commit -m "Update models" || echo "No changes"
           git push
 
       - name: Trigger Render Deploy
