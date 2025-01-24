@@ -11,3 +11,4 @@ uvicorn==0.22.0
 gradio==3.34.0
 tensorflow-recommenders==0.7.3
 lightgbm==4.1.0
+psycopg2-binary==2.9.9  # Use binary version for easier installation
