@@ -6,6 +6,9 @@ from features.grants import extract_grant_features
 from features.researchers import extract_researcher_features
 from raw_data_sources.grants import fetch_grants
 from raw_data_sources.researchers import fetch_researchers
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Suppress TF warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
