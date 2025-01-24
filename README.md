@@ -1,6 +1,6 @@
 # Grant Recommendation System
 
-A machine learning system that matches researchers with relevant funding opportunities based on their profiles and grant details.
+A recommendation model that aims to match researcher profiles with grant details. Recommendation System behind [[Find&Fund](https://findandfund.vercel.app/)]
 
 ## Features
 - Data fetching from Supabase PostgreSQL database
